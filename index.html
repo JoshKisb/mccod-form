@@ -114,45 +114,62 @@ table tr td {
       "CupbOInqvJI",
    ];
 
-   var urlparts = window.location.pathname.split('/');
-   var indexidx = urlparts.findIndex(p => p === "index.html");
-   var baseurl = window.location.origin + urlparts.slice(0, indexidx - 1).join('/')
+   var urlparts = window.location.pathname.split("/");
+   var indexidx = urlparts.findIndex((p) => p === "index.html");
+   var baseurl = window.location.origin + urlparts.slice(0, indexidx - 1).join("/");
 
    let params = new URLSearchParams(document.location.search);
-   var orgUnit = params.get("orgUnitId")
-   var nationality = document.querySelector('.jss172')?.textContent;
+   var orgUnit = params.get("orgUnitId");
+   var nationality = document.querySelector(".jss172")?.textContent;
 
    var casel = document.querySelector(`#YXed7PnLRco-ZKBE8Xm9DJG-val input`);
    if (!!casel) {
-      fetch(baseurl + '/api/33/system/id.json')
-      .then(response => response.json())
-      .then(({ codes }) => {
-         casel.value = codes[0];
-      })
+      fetch(baseurl + "/api/33/system/id.json")
+         .then((response) => response.json())
+         .then(({ codes }) => {
+            casel.value = codes[0];
+         });
    }
-		
-   function gotomcod(){
+
+   function gotomcod() {
       console.log("go to mccod");
       var olsdata = {
          orgUnit,
-         nationality
+         nationality,
       };
-		des.forEach(deId => {
-			olsdata[deId] = document.querySelector(`#YXed7PnLRco-${deId}-val input,#YXed7PnLRco-${deId}-val select`)?.value;
-		})
+      des.forEach((deId) => {
+         olsdata[deId] = document.querySelector(
+            `#YXed7PnLRco-${deId}-val input,#YXed7PnLRco-${deId}-val select`
+         )?.value;
+      });
       console.log("olsdata", olsdata);
-		localStorage.setItem("mcodtemp", JSON.stringify(olsdata))
-        
-      window.open(baseurl + "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html", "_blank");
+      localStorage.setItem("mcodtemp", JSON.stringify(olsdata));
+
+      var ifrm = document.createElement("iframe");
+			ifrm.setAttribute("src", baseurl + "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html");
+			ifrm.style.width = "calc(100% - 40px)";
+			ifrm.style.minHeight = "640px";
+			ifrm.style.position = "absolute";
+			ifrm.style.top = "10px";
+			ifrm.style.left = "20px";
+			console.log("iff", ifrm);
+			document.q.appendChild(ifrm);
+
+			ifrm.onload = function() {
+				var iframeDocument = ifrm.contentDocument || ifrm.contentWindow.document;
+				var headerElement = iframeDocument.getElementById("root").querySelector("header");
+				headerElement.style.display = "none";
+			};
    }
-   
-   window.returntoreview = function(values) {
-      Object.keys(values).forEach(key => {
+
+   window.returntoreview = function (values) {
+      Object.keys(values).forEach((key) => {
          var el = document.querySelector(`#YXed7PnLRco-${key}-val input,#YXed7PnLRco-${key}-val select`);
          if (!!el) el.value = values[key];
-      })
-   }
+      });
+   };
 </script>
+
 <table width="100%">
 	<tbody>
 		<tr>
