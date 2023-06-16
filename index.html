@@ -152,8 +152,10 @@ table tr td {
 			ifrm.style.position = "absolute";
 			ifrm.style.top = "10px";
 			ifrm.style.left = "20px";
+      ifrm.style.border = "1px solid black";
+      ifrm.style.boxShadow = "2px 4px 12px 9px rgba(0,0,0,0.4)";
 			console.log("iff", ifrm);
-			document.q.appendChild(ifrm);
+			document.body.appendChild(ifrm);
 
 			ifrm.onload = function() {
 				var iframeDocument = ifrm.contentDocument || ifrm.contentWindow.document;
