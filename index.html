@@ -118,11 +118,21 @@ table tr td {
    var indexidx = urlparts.findIndex((p) => p === "index.html");
    var baseurl = window.location.origin + urlparts.slice(0, indexidx - 1).join("/");
 
-   let params = new URLSearchParams(document.location.search);
+   let params = new URLSearchParams(document.location.hash.substr(1).replace(/^\/\w+\?/, ''));
    var orgUnit = params.get("orgUnitId");
-   var nationality = document.querySelector(".jss172")?.textContent;
+   var natinalityEls = document.querySelectorAll('div[data-test="scope-selector"] h4');
+   var natinalityEl;
+
+   for (var i = 0; i < natinalityEls.length; i++) {
+     if (natinalityEls[i].textContent.trim() === "Nationality") {
+       natinalityEl = natinalityEls[i];
+       break;
+     }
+   }
+   var nationality = natinalityEl?.nextElementSibling?.firstElementChild.textContent;
 
    var casel = document.querySelector(`#YXed7PnLRco-ZKBE8Xm9DJG-val input`);
+
    if (!!casel) {
       fetch(baseurl + "/api/33/system/id.json")
          .then((response) => response.json())
@@ -130,6 +140,7 @@ table tr td {
             casel.value = codes[0];
          });
    }
+   var ifrm;
 
    function gotomcod() {
       console.log("go to mccod");
@@ -145,23 +156,24 @@ table tr td {
       console.log("olsdata", olsdata);
       localStorage.setItem("mcodtemp", JSON.stringify(olsdata));
 
-      var ifrm = document.createElement("iframe");
-			ifrm.setAttribute("src", baseurl + "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html");
-			ifrm.style.width = "calc(100% - 40px)";
-			ifrm.style.minHeight = "640px";
-			ifrm.style.position = "absolute";
-			ifrm.style.top = "10px";
-			ifrm.style.left = "20px";
+      ifrm = document.createElement("iframe");
+	  ifrm.setAttribute("src", baseurl + "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html");
+	  ifrm.style.width = "calc(100% - 40px)";
+	  ifrm.style.minHeight = "640px";
+	  ifrm.style.position = "absolute";
+	  ifrm.style.top = "10px";
+	  ifrm.style.left = "20px";
       ifrm.style.border = "1px solid black";
       ifrm.style.boxShadow = "2px 4px 12px 9px rgba(0,0,0,0.4)";
-			console.log("iff", ifrm);
-			document.body.appendChild(ifrm);
 
-			ifrm.onload = function() {
-				var iframeDocument = ifrm.contentDocument || ifrm.contentWindow.document;
-				var headerElement = iframeDocument.getElementById("root").querySelector("header");
-				headerElement.style.display = "none";
-			};
+	  console.log("iff", ifrm);
+	  document.body.appendChild(ifrm);
+
+	  ifrm.onload = function() {
+	     var iframeDocument = ifrm.contentDocument || ifrm.contentWindow.document;
+	     var headerElement = iframeDocument.getElementById("root").querySelector("header");
+	     headerElement.style.display = "none";
+	  };
    }
 
    window.returntoreview = function (values) {
@@ -170,8 +182,11 @@ table tr td {
          if (!!el) el.value = values[key];
       });
    };
-</script>
+   window.closeIframe = function () {
+      document.body.removeChild(ifrm);
+   }
 
+</script>
 <table width="100%">
 	<tbody>
 		<tr>
