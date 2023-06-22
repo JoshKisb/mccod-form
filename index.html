@@ -114,6 +114,7 @@ table tr td {
 			"fleGy9CvHYh",
 			"WkXxkKEJLsg",
 			"CupbOInqvJI",
+         "FIfoObQJvNp"
 		];
 
 		var disabledFields = [
@@ -241,6 +242,9 @@ table tr td {
 			.then(({ codes }) => {
 				casel.value = codes[0];
 				triggerInputChange(casel, codes[0]);
+            casel.focus()
+            casel.blur();
+
 				// var ev2 = new Event('input', { bubbles: true});
 				// casel.dispatchEvent(ev2);
 			});
